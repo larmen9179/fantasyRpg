@@ -43,12 +43,66 @@ void gameLoop() {
 
     std::string userInput;
 
-    //while (true) {
-    clearScreen();
-    printDungeon();
+    while (true) {
+        printDungeon();
 
-    std::cout << "Current Health: " << player.getHealthPoints() << '\n';
-    //}
+        std::cout << "Current Health: " << player.getHealthPoints() << '\n';
+        std::cout << "Enter a command or type 'help' for a list of commands...\n"; 
+        std::cout << ">";
+
+        std::cin >> userInput;
+
+        clearScreen();
+        inputHandler(userInput);
+        
+    }
+}
+
+void inputHandler(std::string& userInput) {
+
+    std::cout << '\n';
+
+    if (userInput == "help") {
+        std::cout << "Commands: \n";
+        std::cout << "m - move\n";
+        std::cout << "i - inventory\n";
+        std::cout << "c - change equipment\n";
+        std::cout << "e - exit program\n";
+    }
+	else if (userInput == "m") {
+        std::cout << "Enter a direction to move: \n";
+        std::cout << "w - up";
+        std::cout << "a - left";
+        std::cout << "s - down";
+        std::cout << "d - right";
+	}
+	else if (userInput == "i") {
+        std::cout << "Inventory: \n";
+        std::cout << "Weapons: \n";
+        std::cout << "Magic: \n";
+        std::cout << "Items: \n";
+	}
+	else if (userInput == "c") {
+        std::cout << "Change Equipment: \n";
+        std::cout << "Enter a command to change equipment: \n";
+        std::cout << "w - change weapon";
+        std::cout << "m - change magic";
+	}
+	else if (userInput == "e") {
+        std::cout << "Exiting program...\n";
+		exit(0);
+	}
+	else {
+        std::cout << "Invalid command. Please try again...\n";
+	}
+
+    std::cout << '\n';
+
+    std::cout << "Type \"Enter\" to continue...\n";
+
+    std::cin.ignore();
+    std::cin.get();
+
 }
 
 //functional methods
