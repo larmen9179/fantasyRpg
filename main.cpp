@@ -26,12 +26,12 @@ std::vector<std::vector<std::string>> dungeon =
     {"-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "1", "-1"},
     {"-1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "-1"},
     {"-1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "-1"},
-    {"-1", "p", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1"},
+    {"-1", "s", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1"},
 
 
  };
 
-Player player("Roghbradden");
+Player player("Roghbradden", dungeon);
 
 int main()
 {
@@ -39,12 +39,33 @@ int main()
     return 0;
 }
 
+std::vector<int> playerStart() {
+
+    std::vector<int> playerPostion;
+
+    for (int i = 0; i < dungeon.size(); i++) {
+		for (int j = 0; j < dungeon[i].size(); j++) {
+			if (dungeon[i][j] == "s") {
+				playerPostion.push_back(i);
+				playerPostion.push_back(j);
+			}
+		}
+	}
+
+    return playerPostion;
+}
+
 void gameLoop() {
 
     std::string userInput;
 
+    std::vector<int> playerPosition = playerStart();
+
     while (true) {
-        printDungeon();
+
+        clearScreen();
+
+        printDungeon(playerPosition);
 
         std::cout << "Current Health: " << player.getHealthPoints() << '\n';
         std::cout << "Enter a command or type 'help' for a list of commands...\n"; 
@@ -52,13 +73,13 @@ void gameLoop() {
 
         std::cin >> userInput;
 
-        clearScreen();
-        inputHandler(userInput);
+        //clearScreen();
+        inputHandler(userInput, playerPosition);
         
     }
 }
 
-void inputHandler(std::string& userInput) {
+void inputHandler(std::string& userInput, std::vector<int> &playerPosition){
 
     std::cout << '\n';
 
@@ -68,8 +89,14 @@ void inputHandler(std::string& userInput) {
         std::cout << "i - inventory\n";
         std::cout << "c - change equipment\n";
         std::cout << "e - exit program\n";
+
+        std::cout << '\n';
+        std::cout << "Type \"Enter\" to continue...\n";
     }
 	else if (userInput == "m") {
+
+        std::cout << playerPosition[0] << " " << playerPosition[1] << '\n';
+
         std::cout << "Enter a direction to move: \n";
         std::cout << "w - up";
         std::cout << "a - left";
@@ -94,11 +121,10 @@ void inputHandler(std::string& userInput) {
 	}
 	else {
         std::cout << "Invalid command. Please try again...\n";
+        std::cout << "Type \"Enter\" to continue...\n";
 	}
 
     std::cout << '\n';
-
-    std::cout << "Type \"Enter\" to continue...\n";
 
     std::cin.ignore();
     std::cin.get();
@@ -111,7 +137,7 @@ void clearScreen() {
     system("cls");
 }
 
-void printDungeon() {
+void printDungeon(std::vector<int> &playerPosition) {
 
     for (int i = 0; i < dungeon.size() * 2; i++) {
         std::cout << "-";
@@ -121,6 +147,9 @@ void printDungeon() {
         for (int j = 0; j < dungeon[i].size(); j++) {
             if (dungeon[i][j] == "-1") {
                 std::cout << "  ";
+            }
+            else if(i == playerPosition[0] && j == playerPosition[1]) {
+                std::cout << "p ";
             }
             else {
                 std::cout << dungeon[i][j] << " ";

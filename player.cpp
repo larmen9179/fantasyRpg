@@ -1,12 +1,16 @@
 #include "player.h"
 
 //constructors
-Player::Player(const std::string &nameIn) {
-	this->name = nameIn;
-	this->attackLevel = 1;
-	this->maxHealth = 10;
-	this->healthPoints = 10;
-}
+Player::Player(const std::string &nameIn, const std::vector<std::vector<std::string>> &dungeonIn)
+	
+	: name(nameIn), 
+	attackLevel(1), 
+	maxHealth(10), 
+	healthPoints(10), 
+	keys(0), 
+	hasMap(false), 
+	hasBeen(dungeonIn.size(), std::vector<bool>(dungeonIn[0].size(), false))
+{}
 
 //getters
 std::string Player::getName() const {

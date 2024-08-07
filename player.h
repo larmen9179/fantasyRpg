@@ -11,8 +11,8 @@ private:
 	int attackLevel;
 	int maxHealth;
 	int healthPoints;
-	int keys = 0;
-	bool hasMap = false;
+	int keys;
+	bool hasMap;
 	std::vector<std::vector<bool>> hasBeen;
 
 	//players inventory
@@ -25,7 +25,7 @@ private:
 	std::string currentMagic;
 
 public:
-	Player(const std::string &nameIn);
+	Player(const std::string& nameIn, const std::vector<std::vector<std::string>> &dungeonIn);
 
 	//getters
 	std::string getName() const;
