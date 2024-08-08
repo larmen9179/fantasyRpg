@@ -26,23 +26,62 @@ std::vector<std::vector<std::string>> dungeon =
     {"-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "1", "-1"},
     {"-1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "-1"},
     {"-1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "-1"},
-    {"-1", "s", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1"},
+    {"-1", "s", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1", "-1"}
 
 
  };
 
+//global player object
 Player player("Roghbradden", dungeon);
 
 int main()
 {
+    //calling the main game loop
     gameLoop();
     return 0;
+}
+
+void gameLoop() {
+
+    //user input for commands
+    std::string userInput;
+
+    //storing the player's starting position
+    //this will be used to update the player's position
+    //passed by reference to the moveHandler function
+    //passed by reference to the printDungeon function
+    //passed by reference to the inputHandler function
+    std::vector<int> playerPosition = playerStart();
+
+    while (true) {
+
+        //clearing terminal screen
+        clearScreen();
+
+        //printing the dungeon map
+        printDungeon(playerPosition);
+
+        //printing player stats
+        std::cout << "Current Health: " << player.getHealthPoints() << '\n';
+
+        //prompting for user input
+        std::cout << "Enter a command or type 'help' for a list of commands...\n";
+        std::cout << ">";
+
+        //reading user input
+        std::cin >> userInput;
+
+        //handling user input commands
+        inputHandler(userInput, playerPosition);
+
+    }
 }
 
 std::vector<int> playerStart() {
 
     std::vector<int> playerPostion;
 
+    //finding the
     for (int i = 0; i < dungeon.size(); i++) {
 		for (int j = 0; j < dungeon[i].size(); j++) {
 			if (dungeon[i][j] == "s") {
@@ -53,30 +92,6 @@ std::vector<int> playerStart() {
 	}
 
     return playerPostion;
-}
-
-void gameLoop() {
-
-    std::string userInput;
-
-    std::vector<int> playerPosition = playerStart();
-
-    while (true) {
-
-        clearScreen();
-
-        printDungeon(playerPosition);
-
-        std::cout << "Current Health: " << player.getHealthPoints() << '\n';
-        std::cout << "Enter a command or type 'help' for a list of commands...\n"; 
-        std::cout << ">";
-
-        std::cin >> userInput;
-
-        //clearScreen();
-        inputHandler(userInput, playerPosition);
-        
-    }
 }
 
 void inputHandler(std::string& userInput, std::vector<int> &playerPosition){
@@ -92,16 +107,14 @@ void inputHandler(std::string& userInput, std::vector<int> &playerPosition){
 
         std::cout << '\n';
         std::cout << "Type \"Enter\" to continue...\n";
+
+        std::cin.ignore();
+        std::cin.get();
     }
 	else if (userInput == "m") {
 
-        std::cout << playerPosition[0] << " " << playerPosition[1] << '\n';
+        moveHandler(playerPosition);
 
-        std::cout << "Enter a direction to move: \n";
-        std::cout << "w - up";
-        std::cout << "a - left";
-        std::cout << "s - down";
-        std::cout << "d - right";
 	}
 	else if (userInput == "i") {
         std::cout << "Inventory: \n";
@@ -122,13 +135,50 @@ void inputHandler(std::string& userInput, std::vector<int> &playerPosition){
 	else {
         std::cout << "Invalid command. Please try again...\n";
         std::cout << "Type \"Enter\" to continue...\n";
+        std::cin.ignore();
+        std::cin.get();
 	}
 
     std::cout << '\n';
 
-    std::cin.ignore();
-    std::cin.get();
+}
 
+void moveHandler(std::vector<int>& playerPosition) {
+
+
+
+    std::cout << "Enter a direction to move: \n";
+    std::cout << "w - up" << '\n';
+    std::cout << "a - left" << '\n';
+    std::cout << "s - down" << '\n';
+    std::cout << "d - right" << '\n';
+
+    std::string direction;
+    std::cin >> direction;
+
+
+    if (direction == "w") {
+        playerPosition[0] -= 1;
+    }
+    else if (direction == "a") {
+        playerPosition[1] -= 1;
+    }
+    else if (direction == "s") {
+        playerPosition[0] += 1;
+    }
+    else if (direction == "d") {
+        playerPosition[1] += 1;
+    }
+    else {
+
+        std::cout << '\n';
+
+        std::cout << "Invalid option. Please try again...\n";
+        std::cout << "Type \"Enter\" to continue...\n";
+
+        std::cin.ignore();
+        std::cin.get();
+    }
 }
 
 //functional methods
